@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<script type="text/javascript" src="FilePaths.js"></script>
+<!--link href="css/jquery.mobile.structure.min.css" rel="stylesheet" type="text/css" media="all"-->
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css">
+    <link href="css/pgLI.min.css" rel="stylesheet" type="text/css" media="all">
+</head>
+
+<body>
+
+<div data-role="page">
+	<div data-role="header" style="border-bottom: 0px solid #dddcdb;background:white;">
+		<div class="ui-header ui-bar-a" data-swatch="a" data-theme="a" data-form="ui-bar-a" data-role="header" role="banner">
+		<a class="ui-btn-left ui-btn ui-btn-icon-notext ui-btn-corner-all ui-shadow ui-btn-up-a" data-iconpos="notext" data-theme="a" data-role="button" data-icon="home" title=" Home ">
+			<span class="ui-btn-inner ui-btn-corner-all">
+				<span class="ui-btn-text"> Home </span>
+				<span data-form="ui-icon" class="ui-icon ui-icon-home ui-icon-shadow"></span>
+			</span>
+		</a>
+		<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Letsintern</h1>
+		<a class="ui-btn-right ui-btn ui-btn-icon-notext ui-btn-corner-all ui-shadow ui-btn-up-a" data-iconpos="notext" data-theme="a" data-role="button" data-icon="grid" title=" Navigation ">
+			<span class="ui-btn-inner ui-btn-corner-all">
+				<span class="ui-btn-text"> Navigation </span>
+				<span data-form="ui-icon" class="ui-icon ui-icon-grid ui-icon-shadow"></span>
+			</span>
+		</a>
+	</div>
+            
+	</div>
+	<div data-role="content" style="background:white;" id="container">
+		
+	</div>
+	<div data-role="footer">
+	</div>
+
+</div>
+
+<script src="phonegap.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="scripts/jquery.mobile.min.js"></script>
+<script type="text/javascript">
+	$(document).bind('pageinit',function(){
+                /*showAlert: function (message, title) {
+                    if (navigator.notification) {
+                        navigator.notification.alert(message, 'app started', title, 'OK');
+                    } else {
+                        alert(title ? (title + ": " + message) : message);
+                    }
+                }*/
+		$.ajax({
+			url: _SERVICES+'recentJobs.php',
+			type:'GET',
+			data : { limit : 0 },
+			success : function (data){
+				jobs = JSON.parse(data);
+				fillDetails(0);
+			},
+			error : function (jxhr){
+				alert ('Cannot retrieve data from the server.');
+			}
+		});
+		
+                $(window).bind('scrollstop', function () { 
+                    
+                    if(pageYOffset + $(window).height() == $(document).height())
+                    {
+                        $.mobile.loading('show');
+                        $.ajax({
+                            url: _SERVICES+'recentJobs.php',
+                            type:'GET',
+                            data : { limit : jobs.length },
+                            success : function (data){
+                                    jobs = jobs.concat(JSON.parse(data));
+                                    fillDetails(jobs.length-10);
+                                    $.mobile.loading('hide');
+                            },
+                            error : function (jxhr){
+                                    alert ('Cannot retrieve data from the server.');
+                                    $.mobile.loading('hide');
+                            }
+                        });
+                    }
+                });
+		function fillDetails(from){
+			for(var i =from;i<from+10;i++){
+				$('#container').append(					
+                                    '<div style="margin-bottom:7px;" data-form="ui-btn-up-a" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="a" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-last-child ui-btn-up-a"><div class="ui-btn-inner ui-li"><div class="ui-btn-text"><a href="#" class="ui-link-inherit">'
+                                    +'<span style="width:60px;padding-top: 0px;display: inline-block;"><img src="'+_EMPIMG+jobs[i]["Logo"]+'"></span>'
+                                    +'<div style="margin-left: 75px;margin-top: -60px;"><span style="font-size:15px;">'+jobs[i]["Title"]+'</span><br><span style="font-size:12px;">'+jobs[i]["CompanyName"]+'<br/>'+jobs[i]['LocationString']+'<br/>'+jobs[i]['CategoryName']+'</span></div>'
+                                    +'</a></div><span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span></div></div>'
+				);				
+			}
+		
+		}
+                
+                document.addEventListener("menubutton", onMenuKeyDown, false);
+
+                function onMenuKeyDown() {
+                    alert('haan samajh gaya bhosdi');
+                }
+				
+			
+	});
+</script>
+</body>
+</html>
