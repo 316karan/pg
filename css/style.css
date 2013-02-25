@@ -1,0 +1,20 @@
+/* 
+    Document   : style
+    Created on : Feb 26, 2013, 2:13:29 AM
+    Author     : 316karan
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.active-head{
+border-bottom: 2px solid;
+border-bottom-left-radius: 12px;
+border-bottom-right-radius: 12px;
+}
+
+.amar{
+font-family: 'Amaranth';
+}
+.icon-clock{background: url(../images/csg-512bbf08094c4.png) no-repeat top left; background-position: 0 0; width: 16px; height: 16px; } 
+.icon-location{background: url(../images/csg-512bbf08094c4.png) no-repeat top left; background-position: 0 -18px; width: 16px; height: 16px; } 
+.icon-suggested{background: url(../images/csg-512bbf08094c4.png) no-repeat top left; background-position: 0 -36px; width: 16px; height: 16px; }

@@ -32,8 +32,8 @@
 		</a>
                 </div>
             <div class="ui-header ui-bar-a amar" style="text-align: center;margin-top:-9px;border-bottom: 2px solid;">
-                <span  style="  margin-right: -4%; margin-left: 4%; font-size: 12px;"><a style="text-decoration: none;color:#e66100;" href="suggested.html">&nbsp;&nbsp;<span class="icon-suggested"></span>&nbsp;&nbsp;Suggested&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
-                <span class="active-head" style="  margin-right: 4.5%; margin-left: 4%; font-size: 12px;"><a style="text-decoration: none;color:#e66100;" href="#">&nbsp;&nbsp;<span class="icon-ock"></span>&nbsp;&nbsp;Recent&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
+                <span class="active-head" style="  margin-right: -4%; margin-left: 4%; font-size: 12px;"><a style="text-decoration: none;color:#e66100;" href="#">&nbsp;&nbsp;<span class="icon-suggested"></span>&nbsp;&nbsp;Suggested&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
+                <span  style="  margin-right: 4.5%; margin-left: 4%; font-size: 12px;"><a style="text-decoration: none;color:#e66100;" href="index.html">&nbsp;&nbsp;<span class="icon-ock"></span>&nbsp;&nbsp;Recent&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
                 <span style="  margin-right: 4%; margin-left: -4%; font-size: 12px;"><a style="text-decoration: none;color:#e66100;" href="nearby.html">&nbsp;&nbsp;<span class="icon-location"></span>&nbsp;&nbsp;Near By&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
             </div>
             
@@ -50,12 +50,17 @@
 <script type="text/javascript" src="scripts/jquery.js"></script>
 <script type="text/javascript" src="scripts/jquery.mobile.min.js"></script>
 <script type="text/javascript">
-	$(document).bind('pageinit',function(){
+	$( window ).on( "navigate", function(){
+                call=10;
                 jobs = new Array();
 		$.ajax({
-			url: _SERVICES+'recentJobs.php',
+			url: _SERVICES+'suggestedJobs.php',
 			type:'GET',
-			data : { limit : 0 },
+			data :
+                        { 
+                            searchString : 'Marketing',
+                            limit : 0 
+                        },
 			success : function (data){
 				jobs = JSON.parse(data);
 				fillDetails(0);
@@ -71,10 +76,11 @@
                     {
                         $.mobile.loading('show');
                         $.ajax({
-                            url: _SERVICES+'recentJobs.php',
+                            url: _SERVICES+'suggestedJobs.php',
                             type:'GET',
-                            data : { limit : jobs.length },
+                            data : { searchString : 'Marketing',limit : call },
                             success : function (data){
+                                    call+=10;
                                     jobs = jobs.concat(JSON.parse(data));
                                     fillDetails(jobs.length-10);
                                     $.mobile.loading('hide');
@@ -110,10 +116,6 @@
                 function onMenuKeyDown() {
                     alert('haan samajh gaya bhosdi');
                 }
-                
-                $("#container").swiperight(function() {
-                     $.mobile.navigate("nearby.html");
-                });
 				
 			
 	});
